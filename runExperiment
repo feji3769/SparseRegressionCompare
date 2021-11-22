@@ -7,7 +7,7 @@ do
             for S in 2 4
             do
 
-Rscript Experiments.R -r $r -n $n -p $p -SNR $S -method flippingSpikeSlab
+Rscript Experiments.R -r $r -n $n -p $p -SNR $S -method VBSpikeSlab
 
 done
 done 

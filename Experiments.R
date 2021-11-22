@@ -1,20 +1,20 @@
 #!/usr/bin/env Rscript
 library(argparse)
-p = ArgumentParser(description = "Run comparison of sparse regression models.")
-p$add_argument("-r", type = "integer", help = "Replicated ID.", default = 0)
-p$add_argument("-n", type = "integer", help = "Number of observations.", default = 100)
-p$add_argument("-p", type = "integer", help = "Dimension of each input.", default = 100)
-p$add_argument("-SNR", type = "double", help = "Signal to noise ratio.", default = 4)
-p$add_argument("-method", type = "character", 
+parser = ArgumentParser(description = "Run comparison of sparse regression models.")
+parser$add_argument("-r", type = "integer", help = "Replicated ID.", default = 0)
+parser$add_argument("-n", type = "integer", help = "Number of observations.", default = 100)
+parser$add_argument("-p", type = "integer", help = "Dimension of each input.", default = 100)
+parser$add_argument("-SNR", type = "double", help = "Signal to noise ratio.", default = 4)
+parser$add_argument("-method", type = "character", 
                help = "Inference technique: MCMCHorseshoe, flippingSpikeSlab, VBSpikeSlab.",
                default = "flippingSpikeSlab")
 
-
+argv = parser$parse_args()
 
 source("EvaluateMethod.R")
 source("MakeData.R")
 source("Methods.R")
-argv = p$parse_args()
+
 
 InferenceMethod = switch(
   argv$method, 
@@ -40,8 +40,8 @@ data = data.frame(
   supportSize = result$supportSize, 
   CPUTime = unname(result$CPUTime[1]), 
   ReplicateId = argv$r)
-append_bool = file.exists("experiment_result.csv")
-write.table(x = data, file = "experiment_result.csv", 
+append_bool = file.exists("experimentResults/experiment_result.csv")
+write.table(x = data, file = "experimentResults/experiment_result.csv", 
           append = append_bool, sep = ",",
           row.names = F, col.names = !append_bool)
 

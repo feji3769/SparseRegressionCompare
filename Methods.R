@@ -119,8 +119,7 @@ HorseshoeMCMC = function(X,Y,nmc = 1000, burn = 500){
 
 PostHorseshoeMCMC = function(InferenceResultList){
   beta_hats = abs(InferenceResultList$BetaHat)
-  sorted_beta = sort(beta_hats)
-  kmeans = kmeans(beta_hats, centers = c(sorted_beta[10],sorted_beta[nmc - 10]))
+  kmeans = kmeans(beta_hats, 2, algorithm = c("Lloyd"))
   signal_id = c(1,2)[(kmeans$centers == max(kmeans$centers))]
   return(1 * (kmeans$cluster == signal_id))
 }
