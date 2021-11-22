@@ -2,8 +2,12 @@
 Comparing sparse bayesian regression methods. 
 
 # Dependencies : 
-[argparse](https://cran.r-project.org/web/packages/argparse/readme/README.html).
-[varbvs](https://cran.r-project.org/web/packages/varbvs/index.html)
+
+1. [argparse](https://cran.r-project.org/web/packages/argparse/readme/README.html)
+
+2. [varbvs](https://cran.r-project.org/web/packages/varbvs/index.html)
+
+
 The horseshoe code is simply a copy of the code from [horseshoe](https://cran.r-project.org/web/packages/horseshoe/index.html) on Cran. 
 
 # Run experiments : 
