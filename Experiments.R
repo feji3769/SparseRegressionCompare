@@ -1,11 +1,11 @@
 #!/usr/bin/env Rscript
 library(argparse)
 p = ArgumentParser(description = "Run comparison of sparse regression models.")
-p$add_argument("--r", type = "integer", help = "Replicated ID.", default = 0)
-p$add_argument("--n", type = "integer", help = "Number of observations.", default = 100)
-p$add_argument( "--p", type = "integer", help = "Dimension of each input.", default = 100)
-p$add_argument("--SNR", type = "double", help = "Signal to noise ratio.", default = 4)
-p$add_argument("--method", type = "character", 
+p$add_argument("-r", type = "integer", help = "Replicated ID.", default = 0)
+p$add_argument("-n", type = "integer", help = "Number of observations.", default = 100)
+p$add_argument( "-p", type = "integer", help = "Dimension of each input.", default = 100)
+p$add_argument("-SNR", type = "double", help = "Signal to noise ratio.", default = 4)
+p$add_argument("-method", type = "character", 
                help = "Inference technique: MCMCHorseshoe, flippingSpikeSlab, VBSpikeSlab.",
                default = "flippingSpikeSlab")
 
@@ -28,7 +28,8 @@ PostProcessMethod = switch(
   "flippingSpikeSlab"=PostFlippingMCMC,
   "VBSpikeSlab" = PostSpikeSlabVB
 )
-
+print(sprintf("Replicate : %d, Method : %s, n : %d, p : %d, SNR : %f", 
+argv$r, argv$method, argv$n, argv$p, argv$SNR))
 result = RunExperiment(argv$n, argv$p, argv$SNR, InferenceMethod, PostProcessMethod,k0 = 10)
 data = data.frame(
   n = c(argv$n), 

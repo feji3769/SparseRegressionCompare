@@ -1,0 +1,15 @@
+for r in {0..50}
+do
+    for n in 100 200
+    do
+        for p in 200 500
+        do 
+            for S in 2 4
+            do
+
+Rscript Experiments.R -r $r -n $n -p $p -SNR $S -method flippingSpikeSlab
+
+done
+done 
+done
+done

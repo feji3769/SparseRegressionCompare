@@ -109,7 +109,7 @@ horseshoe = function(y,X, tau = 1, Sigma2 = 1,
   return(result)
 }
 
-HorseshoeMCMC = function(X,Y,nmc = 1000, burn = 500){
+HorseshoeMCMC = function(X,Y,nmc = 2000, burn = 500){
   startTime = proc.time()
   InferenceResultList = horseshoe(Y,X, nmc = nmc,burn = burn)
   totalTime = unname((proc.time() - startTime)[3])
