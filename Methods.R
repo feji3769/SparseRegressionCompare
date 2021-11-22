@@ -109,7 +109,7 @@ horseshoe = function(y,X, tau = 1, Sigma2 = 1,
   return(result)
 }
 
-HorseshoeMCMC = function(X,Y,nmc = 2000, burn = 500){
+HorseshoeMCMC = function(X,Y,nmc = 1000, burn = 500){
   startTime = proc.time()
   InferenceResultList = horseshoe(Y,X, nmc = nmc,burn = burn)
   totalTime = unname((proc.time() - startTime)[3])
@@ -119,7 +119,8 @@ HorseshoeMCMC = function(X,Y,nmc = 2000, burn = 500){
 
 PostHorseshoeMCMC = function(InferenceResultList){
   beta_hats = abs(InferenceResultList$BetaHat)
-  kmeans = kmeans(beta_hats, centers = c(min(beta_hats),max(beta_hats)))
+  sorted_beta = sort(beta_hats)
+  kmeans = kmeans(beta_hats, centers = c(sorted_beta[10],sorted_beta[nmc - 10]))
   signal_id = c(1,2)[(kmeans$centers == max(kmeans$centers))]
   return(1 * (kmeans$cluster == signal_id))
 }
@@ -269,9 +270,33 @@ if(test_flipping){
   PostFlippingMCMC(InferenceResultList)
 }
 
-SpikeSlabVB = function(X, Y){
-  print("not implemented.")
+
+SpikeSlabVB = function(X, Y, verbose = F){
+  startTime = proc.time()
+  res = varbvs::varbvs(X, Z = NULL, y = Y, family = "gaussian", 
+                 verbose = verbose)
+  totalTime = unname((proc.time() - startTime)[3])
+  InferenceResultList = list(
+    CPUTime = totalTime, 
+    pip = res$pip)
+  return(InferenceResultList)
 }
-PostSpikeSlabVB = function(X,Y){
-  print("not implemented.")
+PostSpikeSlabVB = function(InferenceResultList){
+  return(unname(1 * (InferenceResultList$pip > 0.5)))
+}
+
+test_varbvs = T
+if(test_varbvs){
+  set.seed(1)
+  n = 100; p = 200; SNR = 4
+  replicate_list = GenerateReplicate(n, p, SNR)
+  X = replicate_list$X
+  Y = replicate_list$Y
+  Y = Y
+  beta0 = replicate_list$beta0
+  g = p ** 2
+  num_burn = 1000
+  num_iter = 2000
+  InferenceResultList = SpikeSlabVB(X,Y,  verbose = F)
+  res = PostSpikeSlabVB(InferenceResultList)
 }
